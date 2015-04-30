@@ -8,6 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 public class ErrorResponse {
     public static enum ErrorCodes {
         UNKNOWN(-1),
+        BAD_REQUEST(400),
         INTERNAL_SERVER_ERROR(500);
 
         private int code;
@@ -33,6 +34,7 @@ public class ErrorResponse {
     private int errorCode;
     private String errorMessage;
     private String rootCauseMessage;
+    private Object optionalData;
 
     public ErrorResponse() {
 
@@ -64,4 +66,21 @@ public class ErrorResponse {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public String getRootCauseMessage() {
+        return rootCauseMessage;
+    }
+
+    public void setRootCauseMessage(String rootCauseMessage) {
+        this.rootCauseMessage = rootCauseMessage;
+    }
+
+    public Object getOptionalData() {
+        return optionalData;
+    }
+
+    public void setOptionalData(Object optionalData) {
+        this.optionalData = optionalData;
+    }
+
 }

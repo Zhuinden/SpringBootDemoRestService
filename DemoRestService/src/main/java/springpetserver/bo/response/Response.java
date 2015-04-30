@@ -1,6 +1,11 @@
 package springpetserver.bo.response;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import springpetserver.bo.response.component.ErrorResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Zhuinden on 2015.04.30..
@@ -32,6 +37,22 @@ public class Response<T> {
     public static Response<?> createErrorResponse(Throwable throwable) {
         Response<?> response = new Response<>();
         response.setError(new ErrorResponse(throwable));
+        return response;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Response<?> createErrorResponse(BindingResult bindingResult) {
+        Response<?> response = new Response<>();
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(ErrorResponse.ErrorCodes.BAD_REQUEST.getCode());
+        errorResponse.setErrorMessage("Validation error.");
+
+        Map<String, String> errorsInFields = new HashMap<>();
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            errorsInFields.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        errorResponse.setOptionalData(errorsInFields);
+        response.setError(errorResponse);
         return response;
     }
 
