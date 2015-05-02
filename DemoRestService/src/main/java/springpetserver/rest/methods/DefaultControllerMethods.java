@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Component
 public class DefaultControllerMethods {
-    private static final Logger log = LoggerFactory.getLogger(DefaultControllerMethods.class);
+    private static Logger log = LoggerFactory.getLogger(DefaultControllerMethods.class);
 
     public <M, BO extends BusinessObject<M, ID>, ID extends Serializable> BO save(M model, BO businessObject, DefaultCrudService<M, ID, BO> service) {
         model = service.getConverter().convert(businessObject, model);
@@ -36,32 +36,32 @@ public class DefaultControllerMethods {
         return normBO;
     }
 
-    public final <M, ID extends Serializable, BO extends BusinessObject<M, ID>> BO get(ID id, DefaultCrudService<M, ID, BO> service) {
+    public <M, ID extends Serializable, BO extends BusinessObject<M, ID>> BO get(ID id, DefaultCrudService<M, ID, BO> service) {
         M model = service.getRepository().findOne(id);
         BO newBusinessObject = service.getBOProvider().createFromModel(model);
         return newBusinessObject;
     }
 
-    public final <M, ID extends Serializable, BO extends BusinessObject<M, ID>> List<BO> getAll(DefaultCrudService<M, ID, BO> service) {
+    public <M, ID extends Serializable, BO extends BusinessObject<M, ID>> List<BO> getAll(DefaultCrudService<M, ID, BO> service) {
         List<M> modelList = service.getRepository().findAll();
         List<BO> boList = BOListGenerator.createBOList(modelList, service.getBOProvider());
         return boList;
     }
 
-    public final <M, BO extends BusinessObject<M, ID>, ID extends Serializable> List<BO> getAll(DefaultCrudService<M, ID, BO> service, Predicate predicate) {
+    public <M, BO extends BusinessObject<M, ID>, ID extends Serializable> List<BO> getAll(DefaultCrudService<M, ID, BO> service, Predicate predicate) {
         Iterable<M> modelList = service.getRepository().findAll(predicate);
         List<BO> boList = BOListGenerator.createBOList(modelList, service.getBOProvider());
         return boList;
     }
 
-    public final <M, BO extends BusinessObject<M, ID>, ID extends Serializable> List<BO> getAll(DefaultCrudService<M, ID, BO> service, Predicate predicate, OrderSpecifier<?> orderSpecifier) {
+    public <M, BO extends BusinessObject<M, ID>, ID extends Serializable> List<BO> getAll(DefaultCrudService<M, ID, BO> service, Predicate predicate, OrderSpecifier<?> orderSpecifier) {
         Iterable<M> modelList = service.getRepository().findAll(predicate, orderSpecifier);
         List<BO> boList = BOListGenerator.createBOList(modelList, service.getBOProvider());
         return boList;
     }
 
     @Transactional
-    public final <M, BO extends BusinessObject<M, ID>, ID extends Serializable> BO createOrModify(BO businessObject, DefaultCrudService<M, ID, BO> service) {
+    public <M, BO extends BusinessObject<M, ID>, ID extends Serializable> BO createOrModify(BO businessObject, DefaultCrudService<M, ID, BO> service) {
         if (service.getBOValidator() != null) {
             service.getBOValidator().validate(businessObject);
         }
@@ -75,7 +75,7 @@ public class DefaultControllerMethods {
     }
 
     @Transactional
-    public final <M, BO extends BusinessObject<M, ID>, ID extends Serializable> List<BO> createOrModifyAll(List<BO> businessObjects, DefaultCrudService<M, ID, BO> service) {
+    public <M, BO extends BusinessObject<M, ID>, ID extends Serializable> List<BO> createOrModifyAll(List<BO> businessObjects, DefaultCrudService<M, ID, BO> service) {
         List<BO> responseBOs = new ArrayList<>();
         for (BO businessObject : businessObjects) {
             if (service.getBOValidator() != null) {
@@ -103,14 +103,14 @@ public class DefaultControllerMethods {
         return responseBOs;
     }
 
-    public final <M, ID extends Serializable, BO extends BusinessObject<M, ID>> String delete(ID id, DefaultCrudService<M, ID, BO> service) {
+    public <M, ID extends Serializable, BO extends BusinessObject<M, ID>> String delete(ID id, DefaultCrudService<M, ID, BO> service) {
         M model = service.getRepository().findOne(id);
         service.getRepository().delete(model);
         return "OK";
     }
 
     @Transactional
-    public final <M, ID extends Serializable, BO extends BusinessObject<M, ID>> String delete(BO businessObject, DefaultCrudService<M, ID, BO> service) {
+    public <M, ID extends Serializable, BO extends BusinessObject<M, ID>> String delete(BO businessObject, DefaultCrudService<M, ID, BO> service) {
         M model;
         if (businessObject.getId() == null) {
             String errMsg = "Cannot delete entity without id - " + businessObject.returnModelClassName();
